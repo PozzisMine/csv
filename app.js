@@ -56,7 +56,8 @@ function createChart(elementId, labels, data, title) {
         end:100,
         filterMode:"filter"
     }
-]
+],
+        
         xAxis: {
             type: "category",
             data: labels
