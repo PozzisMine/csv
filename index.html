@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>YouTube Analytics</title>
+<title>YouTube Stats</title>
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
@@ -12,13 +12,13 @@
 
 body{
     font-family:Arial,sans-serif;
-    margin:20px;
-    background:#0f172a;
+    background:#111827;
     color:white;
+    margin:20px;
 }
 
-h1,h2{
-    margin-bottom:15px;
+h1{
+    margin-bottom:20px;
 }
 
 .cards{
@@ -29,15 +29,10 @@ h1,h2{
 }
 
 .card{
-    background:linear-gradient(
-        135deg,
-        #8b5cf6,
-        #ec4899
-    );
-    border-radius:18px;
-    padding:20px;
-    min-width:220px;
-    box-shadow:0 10px 25px rgba(0,0,0,.3);
+    background:#1f2937;
+    border-radius:12px;
+    padding:15px;
+    min-width:200px;
 }
 
 .value{
@@ -45,58 +40,30 @@ h1,h2{
     font-weight:bold;
 }
 
+.plus{
+    color:#f472b6;
+    margin-top:5px;
+}
+
 .controls{
     margin:20px 0;
 }
 
-.controls button{
-    background:linear-gradient(
-        135deg,
-        #8b5cf6,
-        #ec4899
-    );
+button{
+    background:#9333ea;
     color:white;
     border:none;
     padding:10px 15px;
-    margin-right:10px;
-    border-radius:10px;
+    border-radius:8px;
     cursor:pointer;
 }
 
 .chart{
     width:100%;
     height:400px;
-    background:#1e293b;
-    border-radius:16px;
+    background:#1f2937;
+    border-radius:12px;
     margin-bottom:25px;
-}
-
-input,
-button{
-    padding:10px;
-    border-radius:10px;
-    border:none;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:15px;
-    background:#1e293b;
-}
-
-th,td{
-    padding:10px;
-    border:1px solid #334155;
-    text-align:left;
-}
-
-th{
-    background:#334155;
-}
-
-#dayStats{
-    margin-top:15px;
 }
 
 </style>
@@ -104,26 +71,26 @@ th{
 
 <body>
 
-<h1>📊 YouTube Analytics</h1>
+<h1>YouTube Stats</h1>
 
 <div class="cards">
 
     <div class="card">
-    <div>👁 Просмотры</div>
-    <div id="views" class="value">...</div>
-    <div id="viewsPlus">📈 +0</div>
+        <div>👁 Просмотры</div>
+        <div id="views" class="value">0</div>
+        <div id="viewsPlus" class="plus">📈 +0</div>
     </div>
 
     <div class="card">
-    <div>👍 Лайки</div>
-    <div id="likes" class="value">...</div>
-    <div id="likesPlus">📈 +0</div>
+        <div>👍 Лайки</div>
+        <div id="likes" class="value">0</div>
+        <div id="likesPlus" class="plus">📈 +0</div>
     </div>
 
     <div class="card">
-    <div>💬 Комментарии</div>
-    <div id="comments" class="value">...</div>
-    <div id="commentsPlus">📈 +0</div>
+        <div>💬 Комментарии</div>
+        <div id="comments" class="value">0</div>
+        <div id="commentsPlus" class="plus">📈 +0</div>
     </div>
 
 </div>
@@ -140,27 +107,14 @@ th{
 
 </div>
 
-<h2>👁 Просмотры</h2>
+<h2>Просмотры</h2>
 <div id="viewsChart" class="chart"></div>
 
-<h2>👍 Лайки</h2>
+<h2>Лайки</h2>
 <div id="likesChart" class="chart"></div>
 
-<h2>💬 Комментарии</h2>
+<h2>Комментарии</h2>
 <div id="commentsChart" class="chart"></div>
-
-<h2>📅 Итоги за день</h2>
-
-<input type="date" id="statsDate">
-<button onclick="showDayStats()">Показать</button>
-
-<div id="dayStats"></div>
-
-<h2>📋 Последние записи</h2>
-
-<div style="overflow-x:auto;">
-    <table id="statsTable"></table>
-</div>
 
 <script src="app.js"></script>
 
