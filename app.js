@@ -44,13 +44,17 @@ function createChart(elementId, labels, data, title) {
         },
 
         dataZoom: [
-            {
-                type: "inside"
-            },
-            {
-                type: "slider"
-            }
-        ],
+    {
+        type: "inside",
+        start: 95,
+        end: 100
+    },
+    {
+        type: "slider",
+        start: 95,
+        end: 100
+    }
+],
 
         xAxis: {
             type: "category",
