@@ -5,7 +5,6 @@ let allRows = [];
 let currentMode = "total";
 
 async function loadData() {
-
     const response = await fetch(CSV_URL);
     const csv = await response.text();
 
@@ -15,58 +14,72 @@ async function loadData() {
         .map(row => row.split(","));
 }
 
-function createChart(id, labels, data, title){
+function createChart(elementId, labels, data, title) {
 
-    const el = document.getElementById(id);
+    const el = document.getElementById(elementId);
 
-    const old = echarts.getInstanceByDom(el);
-
-    if(old){
-        old.dispose();
-    }
+    const oldChart = echarts.getInstanceByDom(el);
+    if (oldChart) oldChart.dispose();
 
     const chart = echarts.init(el);
 
     chart.setOption({
 
-        tooltip:{
-            trigger:"axis"
+        title: {
+            text: title
         },
 
-        dataZoom:[
+        tooltip: {
+            trigger: "axis",
+            formatter: function(params){
+
+                const p = params[0];
+
+                return `
+                    ${p.axisValue}<br>
+                    👁 ${Number(p.value).toLocaleString()}
+                `;
+            }
+        },
+
+        dataZoom: [
             {
-                type:"inside"
+                type: "inside",
+                start: 0,
+                end: 100
             },
             {
-                type:"slider"
+                type: "slider",
+                start: 0,
+                end: 100
             }
         ],
 
-        xAxis:{
-            type:"category",
-            data:labels
+        xAxis: {
+            type: "category",
+            data: labels
         },
 
-        yAxis:{
-            type:"value",
-            scale:true
+        yAxis: {
+            type: "value",
+            scale: true
         },
 
-        series:[
+        series: [
             {
-                name:title,
-                type:"line",
-                smooth:false,
-                showSymbol:true,
-                symbolSize:4,
-                data:data
+                type: "line",
+                smooth: false,
+                showSymbol: true,
+                symbolSize: 5,
+                data: data
             }
         ]
     });
 
+    return chart;
 }
 
-function renderCharts(){
+function renderCharts() {
 
     const labels = [];
 
@@ -74,21 +87,21 @@ function renderCharts(){
     const likes = [];
     const comments = [];
 
-    for(let i=1;i<allRows.length;i++){
+    for(let i = 1; i < allRows.length; i++){
 
         labels.push(allRows[i][0]);
 
         if(currentMode === "total"){
 
-            views.push(Number(allRows[i][1]) || 0);
-            likes.push(Number(allRows[i][2]) || 0);
-            comments.push(Number(allRows[i][3]) || 0);
+            views.push(Number(allRows[i][1]));
+            likes.push(Number(allRows[i][2]));
+            comments.push(Number(allRows[i][3]));
 
         }else{
 
-            views.push(Number(allRows[i][4]) || 0);
-            likes.push(Number(allRows[i][5]) || 0);
-            comments.push(Number(allRows[i][6]) || 0);
+            views.push(Number(allRows[i][4] || 0));
+            likes.push(Number(allRows[i][5] || 0));
+            comments.push(Number(allRows[i][6] || 0));
         }
     }
 
@@ -96,31 +109,73 @@ function renderCharts(){
         "viewsChart",
         labels,
         views,
-        "Просмотры"
+        currentMode === "total"
+            ? "Просмотры"
+            : "Прирост просмотров"
     );
 
     createChart(
         "likesChart",
         labels,
         likes,
-        "Лайки"
+        currentMode === "total"
+            ? "Лайки"
+            : "Прирост лайков"
     );
 
     createChart(
         "commentsChart",
         labels,
         comments,
-        "Комментарии"
+        currentMode === "total"
+            ? "Комментарии"
+            : "Прирост комментариев"
     );
 }
 
-function switchMode(mode){
+function renderTable() {
 
+    const tbody =
+        document.querySelector("#statsTable tbody");
+
+    if(!tbody) return;
+
+    tbody.innerHTML = "";
+
+    const selectedDate =
+        document.getElementById("dateFilter")?.value || "";
+
+    for(let i = allRows.length - 1; i >= 1; i--){
+
+        const row = allRows[i];
+
+        if(
+            selectedDate &&
+            !row[0].startsWith(selectedDate)
+        ){
+            continue;
+        }
+
+        tbody.innerHTML += `
+        <tr>
+            <td>${row[0]}</td>
+            <td>${Number(row[1]).toLocaleString()}</td>
+            <td>${Number(row[2]).toLocaleString()}</td>
+            <td>${Number(row[3]).toLocaleString()}</td>
+            <td>+${Number(row[4] || 0).toLocaleString()}</td>
+            <td>+${Number(row[5] || 0).toLocaleString()}</td>
+            <td>+${Number(row[6] || 0).toLocaleString()}</td>
+        </tr>
+        `;
+    }
+}
+
+function switchMode(mode) {
     currentMode = mode;
     renderCharts();
 }
 
-async function updateData(){
+async function updateData() {
 
     allRows = await loadData();
 
@@ -136,23 +191,16 @@ async function updateData(){
     document.getElementById("comments").textContent =
         Number(last[3]).toLocaleString();
 
-    document.getElementById("viewsPlus").textContent =
-        "📈 +" + Number(last[4] || 0).toLocaleString();
-
-    document.getElementById("likesPlus").textContent =
-        "📈 +" + Number(last[5] || 0).toLocaleString();
-
-    document.getElementById("commentsPlus").textContent =
-        "📈 +" + Number(last[6] || 0).toLocaleString();
-
     renderCharts();
+    renderTable();
 }
 
-async function init(){
-
+async function init() {
     await updateData();
 }
 
 init();
 
-setInterval(updateData, 60000);
+setInterval(async () => {
+    await updateData();
+}, 60000);
