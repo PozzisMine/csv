@@ -63,7 +63,7 @@ function createChart(elementId, labels, data, title) {
 
         yAxis:{
     type:"value",
-    scale:true
+    scale:false
 },
         
         series: [
