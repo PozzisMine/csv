@@ -16,46 +16,60 @@ async function loadData() {
 
 function createChart(elementId, labels, data, title) {
 
-    const chart = echarts.init(
-        document.getElementById(elementId)
-    );
+    const el = document.getElementById(elementId);
 
-    const min = Math.min(...data);
-    const max = Math.max(...data);
+    const oldChart = echarts.getInstanceByDom(el);
+    if (oldChart) {
+        oldChart.dispose();
+    }
+
+    const chart = echarts.init(el);
+
+    let min = Math.min(...data);
+    let max = Math.max(...data);
+
+    if (min === max) {
+        min -= 1;
+        max += 1;
+    }
 
     chart.setOption({
 
-        title:{
-            text:title
+        title: {
+            text: title
         },
 
-        tooltip:{
-            trigger:"axis"
+        tooltip: {
+            trigger: "axis"
         },
 
-        dataZoom:[
-            { type:"inside" },
-            { type:"slider" }
+        dataZoom: [
+            {
+                type: "inside"
+            },
+            {
+                type: "slider"
+            }
         ],
 
-        xAxis:{
-            type:"category",
-            data:labels
+        xAxis: {
+            type: "category",
+            data: labels
         },
 
-        yAxis:{
-            type:"value",
-            scale:true,
-            min:min,
-            max:max
+        yAxis: {
+            type: "value",
+            scale: true,
+            min: min,
+            max: max
         },
 
-        series:[
+        series: [
             {
-                type:"line",
-                smooth:true,
-                showSymbol:false,
-                data:data
+                type: "line",
+                smooth: true,
+                showSymbol: false,
+                data: data
             }
         ]
     });
@@ -71,28 +85,23 @@ function renderCharts() {
     const likes = [];
     const comments = [];
 
-    for(let i=1;i<allRows.length;i++){
+    for (let i = 1; i < allRows.length; i++) {
 
         labels.push(allRows[i][0]);
 
-        if(currentMode === "total"){
+        if (currentMode === "total") {
 
             views.push(Number(allRows[i][1]));
             likes.push(Number(allRows[i][2]));
             comments.push(Number(allRows[i][3]));
 
-        }else{
+        } else {
 
             views.push(Number(allRows[i][4]));
             likes.push(Number(allRows[i][5]));
             comments.push(Number(allRows[i][6]));
-
         }
     }
-
-    document.getElementById("viewsChart").innerHTML="";
-    document.getElementById("likesChart").innerHTML="";
-    document.getElementById("commentsChart").innerHTML="";
 
     createChart(
         "viewsChart",
@@ -122,10 +131,8 @@ function renderCharts() {
     );
 }
 
-function switchMode(mode){
-
+function switchMode(mode) {
     currentMode = mode;
-
     renderCharts();
 }
 
@@ -133,8 +140,7 @@ async function init() {
 
     allRows = await loadData();
 
-    const last =
-        allRows[allRows.length - 1];
+    const last = allRows[allRows.length - 1];
 
     document.getElementById("views").textContent =
         Number(last[1]).toLocaleString();
