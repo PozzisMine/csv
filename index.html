@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Stats</title>
+
+<style>
+body{
+  font-family:Arial,sans-serif;
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+.cards{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.card{
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:20px;
+  min-width:220px;
+}
+
+.value{
+  font-size:32px;
+  font-weight:bold;
+}
+</style>
+
+</head>
+<body>
+
+<h1>YouTube Stats</h1>
+
+<div class="cards">
+
+  <div class="card">
+    <div>👁 Просмотры</div>
+    <div id="views" class="value">...</div>
+  </div>
+
+  <div class="card">
+    <div>👍 Лайки</div>
+    <div id="likes" class="value">...</div>
+  </div>
+
+  <div class="card">
+    <div>💬 Комментарии</div>
+    <div id="comments" class="value">...</div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
