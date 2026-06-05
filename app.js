@@ -46,18 +46,17 @@ function createChart(elementId, labels, data, title) {
         dataZoom:[
     {
         type:"inside",
-        start:95,
+        start:0,
         end:100,
         filterMode:"filter"
     },
     {
         type:"slider",
-        start:95,
+        start:0,
         end:100,
         filterMode:"filter"
     }
-],
-
+]
         xAxis: {
             type: "category",
             data: labels
