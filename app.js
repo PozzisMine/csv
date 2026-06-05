@@ -149,13 +149,14 @@ function renderTable() {
 
         const row = allRows[i];
 
-        if(
-            selectedDate &&
-            !row[0].startsWith(selectedDate)
-        ){
-            continue;
-        }
+        const rowDate = row[0].trim().split(" ")[0];
 
+if (
+    selectedDate &&
+    rowDate !== selectedDate
+){
+    continue;
+}
         tbody.innerHTML += `
         <tr>
             <td>${row[0]}</td>
