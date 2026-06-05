@@ -1,8 +1,10 @@
 const CSV_URL =
 "https://docs.google.com/spreadsheets/u/0/d/1nlZSMyDzCxI8k6CkhG66B4uRjz7zrwT3VpCzJJPO7Dc/export?format=csv";
 
-async function loadData() {
+let allRows = [];
+let currentMode = "total";
 
+async function loadData() {
     const response = await fetch(CSV_URL);
     const csv = await response.text();
 
@@ -12,11 +14,127 @@ async function loadData() {
         .map(row => row.split(","));
 }
 
+function createChart(elementId, labels, data, title) {
+
+    const chart = echarts.init(
+        document.getElementById(elementId)
+    );
+
+    const min = Math.min(...data);
+    const max = Math.max(...data);
+
+    chart.setOption({
+
+        title:{
+            text:title
+        },
+
+        tooltip:{
+            trigger:"axis"
+        },
+
+        dataZoom:[
+            { type:"inside" },
+            { type:"slider" }
+        ],
+
+        xAxis:{
+            type:"category",
+            data:labels
+        },
+
+        yAxis:{
+            type:"value",
+            scale:true,
+            min:min,
+            max:max
+        },
+
+        series:[
+            {
+                type:"line",
+                smooth:true,
+                showSymbol:false,
+                data:data
+            }
+        ]
+    });
+
+    return chart;
+}
+
+function renderCharts() {
+
+    const labels = [];
+
+    const views = [];
+    const likes = [];
+    const comments = [];
+
+    for(let i=1;i<allRows.length;i++){
+
+        labels.push(allRows[i][0]);
+
+        if(currentMode === "total"){
+
+            views.push(Number(allRows[i][1]));
+            likes.push(Number(allRows[i][2]));
+            comments.push(Number(allRows[i][3]));
+
+        }else{
+
+            views.push(Number(allRows[i][4]));
+            likes.push(Number(allRows[i][5]));
+            comments.push(Number(allRows[i][6]));
+
+        }
+    }
+
+    document.getElementById("viewsChart").innerHTML="";
+    document.getElementById("likesChart").innerHTML="";
+    document.getElementById("commentsChart").innerHTML="";
+
+    createChart(
+        "viewsChart",
+        labels,
+        views,
+        currentMode === "total"
+            ? "Просмотры"
+            : "Прирост просмотров"
+    );
+
+    createChart(
+        "likesChart",
+        labels,
+        likes,
+        currentMode === "total"
+            ? "Лайки"
+            : "Прирост лайков"
+    );
+
+    createChart(
+        "commentsChart",
+        labels,
+        comments,
+        currentMode === "total"
+            ? "Комментарии"
+            : "Прирост комментариев"
+    );
+}
+
+function switchMode(mode){
+
+    currentMode = mode;
+
+    renderCharts();
+}
+
 async function init() {
 
-    const rows = await loadData();
+    allRows = await loadData();
 
-    const last = rows[rows.length - 1];
+    const last =
+        allRows[allRows.length - 1];
 
     document.getElementById("views").textContent =
         Number(last[1]).toLocaleString();
@@ -27,47 +145,7 @@ async function init() {
     document.getElementById("comments").textContent =
         Number(last[3]).toLocaleString();
 
-    const labels = [];
-    const viewsData = [];
-
-    for(let i = 1; i < rows.length; i++) {
-
-        labels.push(rows[i][0]);
-
-        viewsData.push(
-            Number(rows[i][1])
-        );
-    }
-
-    const chart = echarts.init(
-        document.getElementById("viewsChart")
-    );
-
-    chart.setOption({
-
-        tooltip:{
-            trigger:"axis"
-        },
-
-        xAxis:{
-            type:"category",
-            data:labels
-        },
-
-        yAxis:{
-            type:"value"
-        },
-
-        series:[
-            {
-                name:"Просмотры",
-                type:"line",
-                smooth:true,
-                data:viewsData
-            }
-        ]
-    });
-
+    renderCharts();
 }
 
 init();
