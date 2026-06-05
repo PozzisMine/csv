@@ -61,13 +61,11 @@ function createChart(elementId, labels, data, title) {
             data: labels
         },
 
-        yAxis: {
-            type: "value",
-            scale: true,
-            min: min,
-            max: max
-        },
-
+        yAxis:{
+    type:"value",
+    scale:true
+},
+        
         series: [
             {
                 type: "line",
