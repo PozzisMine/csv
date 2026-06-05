@@ -1,24 +1,25 @@
-<!DOCTYPE html>
-<html lang="ru">
+<!DOCTYPE html><html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>YouTube Analytics</title><script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script><style>
 
-<title>YouTube Stats</title>
-
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-
-<style>
+*{
+    box-sizing:border-box;
+}
 
 body{
     font-family:Arial,sans-serif;
-    background:#111827;
+    background:#0f172a;
     color:white;
     margin:20px;
 }
 
 h1{
     margin-bottom:20px;
+}
+
+h2{
+    margin-top:30px;
 }
 
 .cards{
@@ -29,19 +30,20 @@ h1{
 }
 
 .card{
-    background:#1f2937;
-    border-radius:12px;
-    padding:15px;
-    min-width:200px;
+    background:linear-gradient(
+        135deg,
+        #8b5cf6,
+        #ec4899
+    );
+    border-radius:16px;
+    padding:20px;
+    min-width:220px;
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
 }
 
 .value{
     font-size:32px;
     font-weight:bold;
-}
-
-.plus{
-    color:#f472b6;
     margin-top:5px;
 }
 
@@ -49,74 +51,117 @@ h1{
     margin:20px 0;
 }
 
-button{
-    background:#9333ea;
+.controls button{
+    background:linear-gradient(
+        135deg,
+        #8b5cf6,
+        #ec4899
+    );
     color:white;
     border:none;
-    padding:10px 15px;
-    border-radius:8px;
+    padding:10px 16px;
+    border-radius:10px;
     cursor:pointer;
+    margin-right:10px;
+}
+
+.controls button:hover{
+    opacity:.9;
 }
 
 .chart{
     width:100%;
     height:400px;
-    background:#1f2937;
-    border-radius:12px;
+    background:#1e293b;
+    border-radius:16px;
     margin-bottom:25px;
 }
 
-</style>
-</head>
+#dateFilter{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    margin-bottom:15px;
+}
 
-<body>
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#1e293b;
+    border-radius:12px;
+    overflow:hidden;
+}
 
-<h1>YouTube Stats</h1>
+th{
+    background:#8b5cf6;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
 
-<div class="cards">
+td{
+    padding:10px;
+    border-top:1px solid #334155;
+}
 
-    <div class="card">
-        <div>👁 Просмотры</div>
-        <div id="views" class="value">0</div>
-        <div id="viewsPlus" class="plus">📈 +0</div>
-    </div>
+tr:hover{
+    background:#273449;
+}
 
-    <div class="card">
-        <div>👍 Лайки</div>
-        <div id="likes" class="value">0</div>
-        <div id="likesPlus" class="plus">📈 +0</div>
-    </div>
+.footer{
+    margin-top:20px;
+    color:#94a3b8;
+    font-size:14px;
+}
 
-    <div class="card">
-        <div>💬 Комментарии</div>
-        <div id="comments" class="value">0</div>
-        <div id="commentsPlus" class="plus">📈 +0</div>
-    </div>
-
+</style></head><body><h1>📊 YouTube Analytics</h1><div class="cards"><div class="card">
+    <div>👁 Просмотры</div>
+    <div id="views" class="value">0</div>
 </div>
 
-<div class="controls">
-
-    <button onclick="switchMode('total')">
-        Общие
-    </button>
-
-    <button onclick="switchMode('plus')">
-        Приросты
-    </button>
-
+<div class="card">
+    <div>👍 Лайки</div>
+    <div id="likes" class="value">0</div>
 </div>
 
-<h2>Просмотры</h2>
-<div id="viewsChart" class="chart"></div>
+<div class="card">
+    <div>💬 Комментарии</div>
+    <div id="comments" class="value">0</div>
+</div>
 
-<h2>Лайки</h2>
-<div id="likesChart" class="chart"></div>
+</div><div class="controls"><button onclick="switchMode('total')">
+    Общие
+</button>
 
-<h2>Комментарии</h2>
-<div id="commentsChart" class="chart"></div>
+<button onclick="switchMode('plus')">
+    Приросты
+</button>
 
-<script src="app.js"></script>
+</div><h2>👁 Просмотры</h2>
+<div id="viewsChart" class="chart"></div><h2>👍 Лайки</h2>
+<div id="likesChart" class="chart"></div><h2>💬 Комментарии</h2>
+<div id="commentsChart" class="chart"></div><h2>📋 История</h2><input
+type="date"
+id="dateFilter"
+onchange="renderTable()"
 
-</body>
+«»
+
+<table id="statsTable"><thead>
+    <tr>
+        <th>Дата</th>
+        <th>Просмотры</th>
+        <th>Лайки</th>
+        <th>Комментарии</th>
+        <th>+ Просмотры</th>
+        <th>+ Лайки</th>
+        <th>+ Комментарии</th>
+    </tr>
+</thead>
+
+<tbody></tbody>
+
+</table><div class="footer">
+    Обновление автоматически каждые 60 секунд
+</div><script src="app.js"></script></body>
 </html>
