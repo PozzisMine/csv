@@ -24,31 +24,46 @@ h1{
     display:flex;
     gap:15px;
     flex-wrap:wrap;
+    margin-bottom:20px;
 }
 
 .card{
     background:white;
     border-radius:12px;
     padding:15px;
-    min-width:180px;
+    min-width:200px;
     box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
 .value{
-    font-size:30px;
+    font-size:32px;
     font-weight:bold;
 }
 
-#viewsChart{
-    margin-top:25px;
+.controls{
+    margin:20px 0;
+}
+
+.controls button{
+    padding:10px 15px;
+    margin-right:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.chart{
     width:100%;
-    height:450px;
+    height:400px;
     background:white;
     border-radius:12px;
     box-shadow:0 2px 5px rgba(0,0,0,.1);
+    margin-bottom:25px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -59,70 +74,43 @@ h1{
 
     <div class="card">
         <div>👁 Просмотры</div>
-        <div id="views" class="value">11713765</div>
+        <div id="views" class="value">...</div>
     </div>
 
     <div class="card">
         <div>👍 Лайки</div>
-        <div id="likes" class="value">94259</div>
+        <div id="likes" class="value">...</div>
     </div>
 
     <div class="card">
         <div>💬 Комментарии</div>
-        <div id="comments" class="value">0</div>
+        <div id="comments" class="value">...</div>
     </div>
 
 </div>
 
-<div id="viewsChart"></div>
+<div class="controls">
 
-<script>
+    <button onclick="switchMode('total')">
+        Общие
+    </button>
 
-const chart = echarts.init(
-    document.getElementById('viewsChart')
-);
+    <button onclick="switchMode('plus')">
+        Приросты
+    </button>
 
-chart.setOption({
+</div>
 
-    title:{
-        text:'Тестовый график'
-    },
+<h2>Просмотры</h2>
+<div id="viewsChart" class="chart"></div>
 
-    tooltip:{
-        trigger:'axis'
-    },
+<h2>Лайки</h2>
+<div id="likesChart" class="chart"></div>
 
-    xAxis:{
-        type:'category',
-        data:[
-            '12:00',
-            '12:01',
-            '12:02',
-            '12:03',
-            '12:04'
-        ]
-    },
+<h2>Комментарии</h2>
+<div id="commentsChart" class="chart"></div>
 
-    yAxis:{
-        type:'value'
-    },
-
-    series:[
-        {
-            type:'line',
-            smooth:true,
-            data:[
-                11689081,
-                11690561,
-                11691909,
-                11694565,
-                11696991
-            ]
-        }
-    ]
-});
-
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
