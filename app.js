@@ -162,9 +162,15 @@ function renderTable() {
             <td>${Number(row[1]).toLocaleString()}</td>
             <td>${Number(row[2]).toLocaleString()}</td>
             <td>${Number(row[3]).toLocaleString()}</td>
-            <td>+${Number(row[4] || 0).toLocaleString()}</td>
-            <td>+${Number(row[5] || 0).toLocaleString()}</td>
-            <td>+${Number(row[6] || 0).toLocaleString()}</td>
+            <td style="color:${Number(row[4]) >= 0 ? '#22c55e' : '#ef4444'}">
+    ${Number(row[4]) >= 0 ? '+' : ''}
+    ${Number(row[4] || 0).toLocaleString()}</td>
+<td style="color:${Number(row[5]) >= 0 ? '#22c55e' : '#ef4444'}">
+    ${Number(row[5]) >= 0 ? '+' : ''}
+    ${Number(row[5] || 0).toLocaleString()}</td>
+<td style="color:${Number(row[6]) >= 0 ? '#22c55e' : '#ef4444'}">
+    ${Number(row[6]) >= 0 ? '+' : ''}
+    ${Number(row[6] || 0).toLocaleString()}</td>
         </tr>
         `;
     }
