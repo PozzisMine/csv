@@ -15,77 +15,58 @@ async function loadData() {
         .map(row => row.split(","));
 }
 
-function createChart(elementId, labels, data, title) {
+function createChart(id, labels, data, title){
 
-    const el = document.getElementById(elementId);
+    const el = document.getElementById(id);
 
-    const oldChart = echarts.getInstanceByDom(el);
+    const old = echarts.getInstanceByDom(el);
 
-    if (oldChart) {
-        oldChart.dispose();
+    if(old){
+        old.dispose();
     }
 
     const chart = echarts.init(el);
 
     chart.setOption({
 
-        title: {
-            text: title,
-            textStyle: {
-                color: "#ffffff"
-            }
+        tooltip:{
+            trigger:"axis"
         },
 
-        tooltip: {
-            trigger: "axis"
-        },
-
-        dataZoom: [
+        dataZoom:[
             {
-                type: "inside",
-                start: 0,
-                end: 100,
-                filterMode: "filter"
+                type:"inside"
             },
             {
-                type: "slider",
-                start: 0,
-                end: 100,
-                filterMode: "filter"
+                type:"slider"
             }
         ],
 
-        xAxis: {
-            type: "category",
-            data: labels,
-            axisLabel: {
-                color: "#ffffff"
-            }
+        xAxis:{
+            type:"category",
+            data:labels
         },
 
-        yAxis: {
-            type: "value",
-            scale: true,
-            axisLabel: {
-                color: "#ffffff"
-            }
+        yAxis:{
+            type:"value",
+            scale:true
         },
 
-        series: [
+        series:[
             {
-                name: title,
-                type: "line",
-                smooth: true,
-                showSymbol: false,
-                data: data
+                name:title,
+                type:"line",
+                smooth:false,
+                showSymbol:true,
+                symbolSize:4,
+                data:data
             }
         ]
     });
 
-    return chart;
 }
 
-function renderCharts() {
+function renderCharts(){
 
     const labels = [];
 
@@ -93,17 +74,17 @@ function renderCharts() {
     const likes = [];
     const comments = [];
 
-    for (let i = 1; i < allRows.length; i++) {
+    for(let i=1;i<allRows.length;i++){
 
         labels.push(allRows[i][0]);
 
-        if (currentMode === "total") {
+        if(currentMode === "total"){
 
             views.push(Number(allRows[i][1]) || 0);
             likes.push(Number(allRows[i][2]) || 0);
             comments.push(Number(allRows[i][3]) || 0);
 
-        } else {
+        }else{
 
             views.push(Number(allRows[i][4]) || 0);
             likes.push(Number(allRows[i][5]) || 0);
@@ -115,119 +96,31 @@ function renderCharts() {
         "viewsChart",
         labels,
         views,
-        currentMode === "total"
-            ? "Просмотры"
-            : "Прирост просмотров"
+        "Просмотры"
     );
 
     createChart(
         "likesChart",
         labels,
         likes,
-        currentMode === "total"
-            ? "Лайки"
-            : "Прирост лайков"
+        "Лайки"
     );
 
     createChart(
         "commentsChart",
         labels,
         comments,
-        currentMode === "total"
-            ? "Комментарии"
-            : "Прирост комментариев"
+        "Комментарии"
     );
 }
 
-function renderTable() {
-
-    const table = document.getElementById("statsTable");
-
-    if (!table) return;
-
-    let html = `
-    <tr>
-        <th>Дата</th>
-        <th>Просмотры</th>
-        <th>Лайки</th>
-        <th>Комментарии</th>
-    </tr>
-    `;
-
-    const rows = allRows.slice(-50).reverse();
-
-    for (let i = 0; i < rows.length; i++) {
-
-        html += `
-        <tr>
-            <td>${rows[i][0]}</td>
-            <td>${rows[i][1]}</td>
-            <td>${rows[i][2]}</td>
-            <td>${rows[i][3]}</td>
-        </tr>
-        `;
-    }
-
-    table.innerHTML = html;
-}
-
-function showDayStats() {
-
-    const selectedDate =
-        document.getElementById("statsDate").value;
-
-    if (!selectedDate) return;
-
-    const dayRows = allRows.filter((row, index) => {
-
-        if (index === 0) return false;
-
-        return row[0].startsWith(selectedDate);
-    });
-
-    if (dayRows.length < 2) {
-
-        document.getElementById("dayStats").innerHTML =
-            "Нет данных за выбранный день";
-
-        return;
-    }
-
-    const first = dayRows[0];
-    const last = dayRows[dayRows.length - 1];
-
-    const views =
-        Number(last[1]) - Number(first[1]);
-
-    const likes =
-        Number(last[2]) - Number(first[2]);
-
-    const comments =
-        Number(last[3]) - Number(first[3]);
-
-    document.getElementById("dayStats").innerHTML = `
-        <div style="
-            background:#1e293b;
-            padding:15px;
-            border-radius:12px;
-            margin-top:10px;
-        ">
-            <h3>${selectedDate}</h3>
-
-            <p>👁 Просмотры: +${views.toLocaleString()}</p>
-            <p>👍 Лайки: +${likes.toLocaleString()}</p>
-            <p>💬 Комментарии: +${comments.toLocaleString()}</p>
-        </div>
-    `;
-}
-
-function switchMode(mode) {
+function switchMode(mode){
 
     currentMode = mode;
     renderCharts();
 }
 
-async function updateData() {
+async function updateData(){
 
     allRows = await loadData();
 
@@ -244,27 +137,22 @@ async function updateData() {
         Number(last[3]).toLocaleString();
 
     document.getElementById("viewsPlus").textContent =
-    "📈 +" Number(last[4] || 0).toLocaleString();
+        "📈 +" + Number(last[4] || 0).toLocaleString();
 
-document.getElementById("likesPlus").textContent =
-    "📈 +" Number(last[5] || 0).toLocaleString();
+    document.getElementById("likesPlus").textContent =
+        "📈 +" + Number(last[5] || 0).toLocaleString();
 
-document.getElementById("commentsPlus").textContent =
-    "📈 +" Number(last[6] || 0).toLocaleString();
+    document.getElementById("commentsPlus").textContent =
+        "📈 +" + Number(last[6] || 0).toLocaleString();
 
     renderCharts();
-    renderTable();
 }
 
-async function init() {
+async function init(){
 
     await updateData();
 }
 
 init();
 
-setInterval(async () => {
-
-    await updateData();
-
-}, 60000);
+setInterval(updateData, 60000);
