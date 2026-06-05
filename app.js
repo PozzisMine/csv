@@ -43,16 +43,18 @@ function createChart(elementId, labels, data, title) {
             trigger: "axis"
         },
 
-        dataZoom: [
+        dataZoom:[
     {
-        type: "inside",
-        start: 95,
-        end: 100
+        type:"inside",
+        start:95,
+        end:100,
+        filterMode:"filter"
     },
     {
-        type: "slider",
-        start: 95,
-        end: 100
+        type:"slider",
+        start:95,
+        end:100,
+        filterMode:"filter"
     }
 ],
 
