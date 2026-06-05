@@ -243,6 +243,15 @@ async function updateData() {
     document.getElementById("comments").textContent =
         Number(last[3]).toLocaleString();
 
+    document.getElementById("viewsPlus").textContent =
+    "📈 +" Number(last[4] || 0).toLocaleString();
+
+document.getElementById("likesPlus").textContent =
+    "📈 +" Number(last[5] || 0).toLocaleString();
+
+document.getElementById("commentsPlus").textContent =
+    "📈 +" Number(last[6] || 0).toLocaleString();
+
     renderCharts();
     renderTable();
 }
