@@ -6,13 +6,18 @@
 
 <title>YouTube Stats</title>
 
-<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <style>
 
 body{
     font-family:Arial,sans-serif;
     margin:20px;
+    background:#f5f5f5;
+}
+
+h1{
+    margin-bottom:20px;
 }
 
 .cards{
@@ -22,26 +27,30 @@ body{
 }
 
 .card{
-    border:1px solid #ddd;
-    border-radius:10px;
+    background:white;
+    border-radius:12px;
     padding:15px;
-    min-width:200px;
+    min-width:180px;
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
 .value{
-    font-size:32px;
+    font-size:30px;
     font-weight:bold;
 }
 
 #viewsChart{
+    margin-top:25px;
     width:100%;
     height:450px;
-    margin-top:30px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
 </style>
-
 </head>
+
 <body>
 
 <h1>YouTube Stats</h1>
@@ -50,26 +59,70 @@ body{
 
     <div class="card">
         <div>👁 Просмотры</div>
-        <div id="views" class="value">...</div>
+        <div id="views" class="value">11713765</div>
     </div>
 
     <div class="card">
         <div>👍 Лайки</div>
-        <div id="likes" class="value">...</div>
+        <div id="likes" class="value">94259</div>
     </div>
 
     <div class="card">
         <div>💬 Комментарии</div>
-        <div id="comments" class="value">...</div>
+        <div id="comments" class="value">0</div>
     </div>
 
 </div>
 
-<h2>График просмотров</h2>
-
 <div id="viewsChart"></div>
 
-<script src="app.js"></script>
+<script>
+
+const chart = echarts.init(
+    document.getElementById('viewsChart')
+);
+
+chart.setOption({
+
+    title:{
+        text:'Тестовый график'
+    },
+
+    tooltip:{
+        trigger:'axis'
+    },
+
+    xAxis:{
+        type:'category',
+        data:[
+            '12:00',
+            '12:01',
+            '12:02',
+            '12:03',
+            '12:04'
+        ]
+    },
+
+    yAxis:{
+        type:'value'
+    },
+
+    series:[
+        {
+            type:'line',
+            smooth:true,
+            data:[
+                11689081,
+                11690561,
+                11691909,
+                11694565,
+                11696991
+            ]
+        }
+    ]
+});
+
+</script>
 
 </body>
 </html>
